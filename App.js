@@ -40,7 +40,7 @@ export default function App() {
   return (
     <View style={styles.appContainer}>
       <Button title="Add new task" color='#5c0acc' onPress={startAddTask}/>
-        <Image style={styles.image} source={require(".../assets/image/neres-david-neres.gif")}></Image>
+        <Image style={styles.image} source={require("../assets/image/neres-david-neres.gif")}></Image>
       <TaskInput visible={modalVisible} onAddTask={addTaskHandler} onCancel={endAddTask}></TaskInput>
       {/* <View style={styles.inputContainer}>
         <TextInput
