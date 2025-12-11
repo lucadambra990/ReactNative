@@ -40,7 +40,7 @@ export default function App() {
   return (
     <View style={styles.appContainer}>
       <Button title="Add new task" color='#5c0acc' onPress={startAddTask}/>
-        <Image style={styles.image} source={require("../assets/image/neres-david-neres.gif")}></Image>
+        <Image style={styles.gif} source={require("./assets/images/neres-david-neres.gif")}></Image>
       <TaskInput visible={modalVisible} onAddTask={addTaskHandler} onCancel={endAddTask}></TaskInput>
       {/* <View style={styles.inputContainer}>
         <TextInput
@@ -125,5 +125,11 @@ const styles = StyleSheet.create({
         width:100,
         height:100,
         margin:20
+    },
+    gif:{
+      width:350,
+      height:400,
+      margin:20,
+      alignItems:'center'
     }
 });
