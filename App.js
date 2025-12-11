@@ -6,13 +6,13 @@ import TaskInput from './components/TaskInput';
 export default function App() {
   // const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [modalVisible,setModalVisible]=useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
 
-  function startAddTask(){
+  function startAddTask() {
     setModalVisible(true); //Apre la modale
   }
 
-  function endAddTask(){
+  function endAddTask() {
     setModalVisible(false); //Chiude la modale
   }
   // function taskInputHandler(enteredTask) {
@@ -39,8 +39,8 @@ export default function App() {
 
   return (
     <View style={styles.appContainer}>
-      <Button title="Add new task" color='#5c0acc' onPress={startAddTask}/>
-        <Image style={styles.gif} source={require("./assets/images/neres-david-neres.gif")}></Image>
+      <Button title="Add new task" color='#5c0acc' onPress={startAddTask} />
+      <Image style={styles.gif} source={require("./assets/images/neres-david-neres.gif")}></Image>
       <TaskInput visible={modalVisible} onAddTask={addTaskHandler} onCancel={endAddTask}></TaskInput>
       {/* <View style={styles.inputContainer}>
         <TextInput
@@ -121,15 +121,15 @@ const styles = StyleSheet.create({
   goalContainer: {
     flex: 4
   },
-  image:{
-        width:100,
-        height:100,
-        margin:20
-    },
-    gif:{
-      width:350,
-      height:400,
-      margin:20,
-      alignItems:'center'
-    }
+  image: {
+    width: 100,
+    height: 100,
+    margin: 20
+  },
+  gif: {
+    width: 350,
+    height: 400,
+    margin: 20,
+    alignItems: 'center'
+  }
 });
