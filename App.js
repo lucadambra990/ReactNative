@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, TextInput, View, Modal, Image, ScrollView } from 'react-native';
 import TaskItem from './components/TaskItem';
 import TaskInput from './components/TaskInput';
+import { fetchTasks } from './services/taskService';
 
 export default function App() {
   // const [task, setTask] = useState("");
@@ -36,6 +37,15 @@ export default function App() {
   //     setTask("");
   //   }
   // }
+
+  async function loadTask(){
+    const tasks=await fetchTasks();
+    setTasks(tasks)
+  }
+  useEffect(()=>{
+    loadTask()
+  },[])
+
 
   return (
     <View style={styles.appContainer}>
