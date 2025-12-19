@@ -1,16 +1,19 @@
 import React from "react";
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View ,StyleSheet, Pressable} from "react-native";
 
-const TaskItem = ({ taskItem, onDelete }) => {
+const TaskItem = ({taskItem,onDelete}) => {
   return (
     <View style={styles.taskItem}>
-      <Pressable
-        android_ripple={{ color: '#210644' }}
-        onPress={() => onDelete(taskItem.id)}
-        style={({pressed})=> pressed && styles.pressedItem}
-        >
-        <Text style={styles.taskText}>{taskItem.task}</Text>
-      </Pressable>
+    <Pressable 
+    android_ripple={{ color: '#210644' }} 
+    onPress={()=>onDelete(taskItem)}
+    style={({ pressed }) => pressed && styles.pressedItem}
+
+    >
+   
+      <Text style={styles.taskText}>{taskItem.text}</Text>
+
+    </Pressable>
     </View>
   );
 };
@@ -21,14 +24,13 @@ const styles = StyleSheet.create({
   taskItem: {
     margin: 8,
     borderRadius: 6,
-
     backgroundColor: "#5e0acc",
-  },
-  taskText: {
-    color: "#fff",
-    padding: 8
   },
   pressedItem:{
     opacity:0.5
-  }
+  },
+  taskText: {
+    color: "#fff", 
+    padding: 8,
+  },
 });

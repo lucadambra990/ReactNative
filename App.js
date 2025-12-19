@@ -1,145 +1,115 @@
-import { useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet, Text, TextInput, View, Modal, Image, ScrollView } from 'react-native';
-import TaskItem from './components/TaskItem';
-import TaskInput from './components/TaskInput';
-import { fetchTasks } from './services/taskService';
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  ScrollView,
+  FlatList,
+} from "react-native";
+import TaskItem from "./components/TaskItem";
+import TaskInput from "./components/TaskInput";
+import { addTask, doneTask, fetchTasks } from "./services/taskService";
 
 export default function App() {
   // const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
 
   function startAddTask() {
     setModalVisible(true); //Apre la modale
   }
 
   function endAddTask() {
-    setModalVisible(false); //Chiude la modale
+    setModalVisible(false); //Apre la modale
   }
-  // function taskInputHandler(enteredTask) {
-  //   console.log(enteredTask)
-  //   setTask(enteredTask)
-  // }
 
+  // function taskInputHandler(enteredTask) {
+  //   console.log(enteredTask);
+  //   setTask(enteredTask);
+  // }
   function deleteTask(id) {
-    setTasks(current => {
-      return current.filter((t) => t.id !== id)
-    });
+    // setTasks((current) => {
+    //   return current.filter((t) => t.id !== id);
+    // });
+    doneTask(id)
+    loaaTasks()
   }
   function addTaskHandler(task) {
-    setTasks(current => [...current, { task, id: new Date() }]);
+   // setTasks((current) => [...current, { task, id: new Date() }]);
+   addTask(task)
+    loaaTasks()
   }
-
   // function addTaskHandler() {
-  //   if (task !== "") {
-
-  //     setTasks(current => [...current,{task,id:new Date()}]);
-  //     setTask("");
-  //   }
+  //   setTasks((current) => [...current, { task,id:new Date()}]);
+  //   setTask("");
   // }
-
-  async function loadTask(){
+  async function loaaTasks(){
     const tasks=await fetchTasks();
+    console.log(tasks)
     setTasks(tasks)
   }
   useEffect(()=>{
-    loadTask()
+    loaaTasks()
   },[])
-
-
+ const visibleTask=tasks.filter(t=>!t.done)
   return (
     <View style={styles.appContainer}>
-      <Button title="Add new task" color='#5c0acc' onPress={startAddTask} />
-      <Image style={styles.gif} source={require("./assets/images/neres-david-neres.gif")}></Image>
+      <Button title="Add New Task" color="#5e0acc" onPress={startAddTask} />
+
       <TaskInput visible={modalVisible} onAddTask={addTaskHandler} onCancel={endAddTask}></TaskInput>
       {/* <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder='Inserisci task'
+          placeholder="Inserisci task"
           onChangeText={taskInputHandler}
           value={task}
         />
         <Button
-          title='Aggiungi'
+          title="Aggiungi"
           onPress={addTaskHandler}
           disabled={task === ""}
         ></Button>
       </View> */}
-      <View style={styles.goalContainer}>
+      <View style={styles.goalsContainer}>
         <FlatList
-          alwaysBounceVertical={false}
-          data={tasks}
+          alwaysBounceVertical={true}
+          data={visibleTask}
           renderItem={(itemData) => {
             return (
-              <TaskItem onDelete={deleteTask} taskItem={itemData.item}></TaskItem>
-              // <View style={styles.taskText}>
-              //   <Text style={styles.taskItem}>{itemData.item}</Text>
+              <TaskItem
+                onDelete={deleteTask}
+                taskItem={itemData.item}
+              ></TaskItem>
+              // <View style={styles.taskItem}>
+              //   <Text style={styles.taskText}>{itemData.item.task}</Text>
               // </View>
             );
           }}
           keyExtractor={(item) => item.id}
         />
         {/* <ScrollView>
-          {
-            tasks.map((t, index) => (
-              <View key={index} style={styles.taskItem}>
-                <Text key={index} style={styles.taskText}>{t}</Text>
-              </View>
-            ))}
+          {tasks.map((t, index) => (
+            <View key={index} style={styles.taskItem}>
+              <Text style={styles.taskText}>{t}</Text>
+            </View>
+          ))}
         </ScrollView> */}
       </View>
-      {/* <View style={{ flexDirection: 'row', height:200 }}>
-        <View style={{ backgroundColor: 'red', flex: 1 }} />
-        <View style={{ backgroundColor: 'white', flex: 1}} />
-        <View style={{ backgroundColor: 'green', flex: 1 }} />
-      </View> */}
-      {/* <View>
-         <Image
-        style={styles.logo}
-        source={{
-          uri: 'https://it.wikipedia.org/wiki/File:SSC_Napoli_2024_%28azure%29.svg',
-        }}
-      />
-      </View> */}
-    </View >
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    backgroundColor: '#199FD6',
+    backgroundColor: "#fff",
     paddingTop: 50,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+  },
 
+  goalsContainer: {
+    flex: 4,
   },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    width: '70%',
-    padding: 8
-  },
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderColor: '#cccccc'
-  },
-  goalContainer: {
-    flex: 4
-  },
-  image: {
-    width: 100,
-    height: 100,
-    margin: 20
-  },
-  gif: {
-    width: 350,
-    height: 400,
-    margin: 20,
-    alignItems: 'center'
-  }
 });
