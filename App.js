@@ -19,10 +19,10 @@ export default function App() {
         <Stack.Screen 
           name="AddEditUser" 
           component={AddEditUser} 
-          // Il titolo verrà sovrascritto dinamicamente nel componente
           options={{ title: 'Gestione Utente' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
