@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextInput, View, StyleSheet, Alert } from "react-native";
-import { db } from "./../firebaseConfig";
+import { db } from "../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
-const AddEditUser = ({navigation}) => {
+const AddEditUser = ({navigation,route}) => {
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+
+const userEdit = route.params ? route.params.user : null;
 
   const handleSave = async () => {
     // Logica per salvare o aggiornare l'utente
@@ -15,22 +17,47 @@ const AddEditUser = ({navigation}) => {
       return;
     }
     try {
-      await addDoc(collection(db, "users"), {
-        nome,
-        cognome,
-        email,
-        telefono,
-        createAt: new Date(),
-      });
-      Alert.alert("Successo", "Utente salvato con successo.");
-      navigation.goBack()
+      if(userEdit){
+        // Logica per aggiornare l'utente esistente (non implementata in questo snippet)
+        const userRef = doc(db, "users", userEdit.id);
+        await updateDoc(userRef, {
+          nome,
+          cognome,
+          email,
+          telefono,
+        });
+        Alert.alert("Successo", "Utente aggiornato con successo.");
+      }else{
+        // Aggiungi nuovo utente
+        await addDoc(collection(db, "users"), {
+          nome,
+          cognome,
+          email,
+          telefono,
+          createAt: new Date(),
+        });
+        Alert.alert("Successo", "Utente aggiunto con successo.");
+
+      }
+      navigation.goBack();
     } catch (error) {
       Alert.alert(
         "Errore",
-        "Si è verificato un errore durante il salvataggio dell'utente. "+error.message,
+        "Si è verificato un errore durante il salvataggio dell'utente" + error.message,
       );
     }
   };
+  useEffect(() => {
+    if (userEdit) {
+      setNome(userEdit.nome);
+      setCognome(userEdit.cognome);
+      setEmail(userEdit.email);
+      setTelefono(userEdit.telefono);
+      navigation.setOptions({ title: 'Modifica Utente' });
+    }else{
+      navigation.setOptions({ title: 'Aggiungi Utente' });
+    }
+  }, [userEdit,navigation]);  
   return (
     <View style={styles.container}>
       <TextInput

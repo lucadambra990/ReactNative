@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot, deleteDoc} from "firebase/firestore";
 import React, { useState, useEffect, act } from "react";
 import {
   FlatList,
@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert
 } from "react-native";
 import { db } from "../firebaseConfig";
 
@@ -25,6 +26,22 @@ const Home = () => {
 
     return () => unsubscribe();
   }, []);
+
+  function handleDelete(id){
+    Alert.alert("Elimina utente", "Sei sicuro di voler eliminare questo utente?",[
+      {text:"No", style:"cancel"},
+      {text:"Si", onPress: async ()=>{
+        try{
+          await deleteDoc(doc(db, "users", id));
+        }catch(error){
+          Alert.alert(
+            "Errore",
+            "Si è verificato un errore con l'eliminazione dell'utente"
+          )
+        }
+      }}
+    ]);
+  }
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.info}>
@@ -41,7 +58,10 @@ const Home = () => {
         >
           <Text style={styles.btnText}>Modifica </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btn, styles.deleteBtn]}>
+        <TouchableOpacity 
+          style={[styles.btn, styles.deleteBtn]}
+          onPress={()=>handleDelete(item.id)}
+          >
           <Text style={styles.btnText}>Cancella </Text>
         </TouchableOpacity>
       </View>
